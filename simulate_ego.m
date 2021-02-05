@@ -1,7 +1,7 @@
 function [sim] = simulate_ego(param)
 %SIMULATE_EGO
 % param.theta = 0; % facing toward object
-% param.HD = HD;
+% param.Z = angular variable;
 % param.P = P;
 % param.kappa = 5;
 % param.rp = [75, 75];
@@ -13,8 +13,11 @@ Y = param.P(:,3);
 T = param.P(:,1); 
 fs = mode(diff(T));
 
+% shift param.theta (so that 0 is heading toward refpt)
+% param.theta = mod(param.theta-180,360)-180;
+
 % calculate egocentric bearing
-ego = deg2rad(mod(atan2d(param.rp(2)-Y, param.rp(1)-X) - param.HD, 360)-180); 
+ego = deg2rad(mod(atan2d(param.rp(2)-Y, param.rp(1)-X) - param.Z, 360)-180); 
 
 % angular bins
 [~, edges, bin] = histcounts(ego, linspace(-pi,pi,101)); % circular?
