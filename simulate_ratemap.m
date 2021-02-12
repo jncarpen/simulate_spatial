@@ -1,11 +1,9 @@
 function [map] = simulate_ratemap(root)
 %SIMULATE_RATEMAP Summary of this function goes here
 %   INPUTS -
-%   root.peakrate:      peak rate (in Hz)
-%   root.ctrX:          center of place field (x)          
-%   root.ctrY:          center of place field (y)
-%   root.sigmaX:        spread of place field (x)
-%   root.sigmaY:        spread of place field (y)
+%   root.A:             peak rate (in Hz)
+%   root.ctr:           center of place field (x,y)          
+%   root.sigma:         spread of place field (x,y)
 %   root.size:          size of square arena
 %   root.bins:          # of bins (in each dimension)
 %   root.P:             position vector, optional
@@ -15,7 +13,7 @@ function [map] = simulate_ratemap(root)
 %   J. Carpenter, 2021.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % amplitude of gaussian (max FR in Hz)
-A = root.peakrate;
+A = root.A;
 
 % position of gaussian center
 x0 = root.ctr(1);
@@ -45,10 +43,20 @@ xbin(xbin == 0) = nan;  % x=0 indicates values outside edges range
 ybin(ybin == 0) = nan;  % x=0 indicates values outside edges range 
 
 % generate ratemap (Hz)
-fxy = A.*exp(-(((X-x0).^2)./(2*sigmaX.^2) + ((Y-y0).^2.)/(2*sigmaY.^2)));
+% fxy = A.*exp(-(((X-x0).^2)./(2*sigmaX.^2) + ((Y-y0).^2.)/(2*sigmaY.^2)));
+fxy = exp(-(((X-x0).^2)./(2*sigmaX.^2) + ((Y-y0).^2.)/(2*sigmaY.^2)));
 
-% output
+% calculate inverse of ratemap
+fxyi = 1-fxy;
+fxyi(fxyi==1) = 0;
+
+% scale ratemaps by A (peak fr)
+fxy = A.*fxy;
+fxyi = A.*fxyi;
+
+% package output
 map.z = fxy;
+map.zi = fxyi;
 map.whichBin.x = xbin;
 map.whichBin.y = ybin;
 

@@ -1,13 +1,15 @@
 function [sim] = simulate_ego(param)
 %SIMULATE_EGO
-% param.theta = 0; % facing toward object
-% param.Z = angular variable;
-% param.P = P;
-% param.kappa = 5;
-% param.rp = [75, 75];
-% param.A = 10;
-
-% get position
+%   INPUTS-
+%   param.theta = 0; % facing toward object
+%   param.Z = angular variable;
+%   param.P = P;
+%   param.kappa = 5;
+%   param.rp = [75, 75];
+%   param.A = 10;
+%   J. Carpenter, 2021.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% unpack position
 X = param.P(:,2);
 Y = param.P(:,3);
 T = param.P(:,1); 
