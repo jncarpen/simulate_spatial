@@ -1,4 +1,4 @@
-function [sim] = simulate_ego(param)
+function [sim, vm_pdf] = simulate_ego(param)
 %SIMULATE_EGO
 %   INPUTS-
 %   param.theta = 0; % facing toward object
@@ -15,11 +15,14 @@ Y = param.P(:,3);
 T = param.P(:,1); 
 fs = mode(diff(T));
 
-% shift param.theta (so that 0 is heading toward refpt)
-% param.theta = mod(param.theta-180,360)-180;
+% shift theta
+pref_theta = mod(param.theta + 90, 360);
+pref_theta = deg2rad(pref_theta) - pi;
 
 % calculate egocentric bearing
-ego = deg2rad(mod(atan2d(param.rp(2)-Y, param.rp(1)-X) - param.Z, 360)-180); 
+allo = mod(atan2d(param.rp(2)-Y, param.rp(1)-X), 360);
+allo = mod(allo + 90, 360);
+ego = deg2rad(mod(allo - param.Z, 360)-180);
 
 % angular bins
 [~, edges, bin] = histcounts(ego, linspace(-pi,pi,101)); % circular?
@@ -27,7 +30,7 @@ ctrs = (diff(edges)/2) + edges(1:end-1);
 bin(bin==0) = nan; 
 
 % make the von-Mises distribution
-[vm_pdf, ~] = circ_vmpdf(ctrs, param.theta, param.kappa);
+[vm_pdf, ~] = circ_vmpdf(ctrs, pref_theta, param.kappa);
 
 % lambda matrix
 vm_pdf = (param.A.*vm_pdf).*fs;
