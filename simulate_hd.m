@@ -8,10 +8,8 @@ function [sim] = simulate_hd(param)
 % param.A = 10;
 
 % get position
-X = param.P(:,2);
-Y = param.P(:,3);
 T = param.P(:,1); 
-fs = mode(diff(T));
+tpf = mode(diff(T));
 Z = param.Z;
 pref_theta = mod(param.theta + 90, 360);
 
@@ -29,7 +27,7 @@ bin(bin==0) = nan;
 [vm_pdf, ~] = circ_vmpdf(ctrs, deg2rad(pref_theta), param.kappa);
 
 % lambda matrix
-vm_pdf = (param.A.*vm_pdf).*fs;
+vm_pdf = (param.A.*vm_pdf).*tpf;
 
 % loop through each timepoint
 simTrn = zeros(length(T), 1);

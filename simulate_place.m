@@ -1,4 +1,4 @@
-function [sim] = simulate_place(map, t)
+function [sim] = simulate_place(map,t)
 %SIMULATE_PLACE_V2 
 %   INPUTS -
 %   t:                    Tx1 vector of timestamps (s)

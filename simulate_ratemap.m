@@ -43,20 +43,20 @@ xbin(xbin == 0) = nan;  % x=0 indicates values outside edges range
 ybin(ybin == 0) = nan;  % x=0 indicates values outside edges range 
 
 % generate ratemap (Hz)
-% fxy = A.*exp(-(((X-x0).^2)./(2*sigmaX.^2) + ((Y-y0).^2.)/(2*sigmaY.^2)));
-fxy = exp(-(((X-x0).^2)./(2*sigmaX.^2) + ((Y-y0).^2.)/(2*sigmaY.^2)));
+fxy_raw = exp(-(((X-x0).^2)./(2*sigmaX.^2) + ((Y-y0).^2.)/(2*sigmaY.^2)));
 
 % calculate inverse of ratemap
-fxyi = 1-fxy;
+fxyi = 1-fxy_raw;
 fxyi(fxyi==1) = 0;
 
 % scale ratemaps by A (peak fr)
-fxy = A.*fxy;
+fxy = A.*fxy_raw;
 fxyi = A.*fxyi;
 
 % package output
 map.z = fxy;
 map.zi = fxyi;
+map.pdx = fxy_raw;
 map.whichBin.x = xbin;
 map.whichBin.y = ybin;
 
