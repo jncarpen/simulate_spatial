@@ -1,4 +1,4 @@
-function [sim] = simulate_placehd(map,param)
+function [sim] = simulate_placehd(map, param)
 %SIMULATE_PLACEMOD
 %   param.P:        position vector
 %   param.theta:    head direction (range 0-360 deg)
